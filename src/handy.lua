@@ -27,16 +27,24 @@ local update = function (self, dt)
         self.motionY = 0
     end
     
-    self.x = self.x + self.motionX * 100 * dt
-    self.y = self.y + self.motionY * 100 * dt
+    if self.moveMode == 1 then
+        self.x = self.x + self.motionX * 100 * dt
+        self.y = self.y + self.motionY * 100 * dt
+    end
     
     self.sm:tick("update", dt)
 end
 
 local draw = function (self)
-    self.sprite:drawCenter(self.frame, self.x + 20, self.y + 40)
+    self.sprite:drawCenter(self.frame,
+                            self.x + self.spOffsetX,
+                            self.y + self.spOffsetY)
     
-    love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
+    -- love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
+end
+
+local keypressed = function (self, key, scancode, isrepeat)
+    self.sm:tick("keypressed", key, scancode, isrepeat)
 end
 
 return function (x, y)
@@ -45,11 +53,15 @@ return function (x, y)
     
     inst.update = update
     inst.draw = draw
+    inst.keypressed = keypressed
     
     inst.x = x or 0
     inst.y = y or 0
     inst.width = 50
     inst.height = 50
+    
+    inst.spOffsetX = 20
+    inst.spOffsetY = 40
     
     inst.motionX = 0
     inst.motionY = 0
@@ -58,8 +70,11 @@ return function (x, y)
     
     inst.frame = 1
     
-    inst.sm = smClass.statemachine.new()
+    inst.moveMode = 1
     
+    inst.detectingHole = nil
+    
+    inst.sm = smClass.statemachine.new()
     
     
     for k, class in pairs(states) do

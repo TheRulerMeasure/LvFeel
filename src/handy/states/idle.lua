@@ -9,6 +9,7 @@ class.new = function (handy)
     
     self.arrive = class.arrive
     self.update = class.update
+    self.keypressed = class.keypressed
     
     return self
 end
@@ -23,6 +24,15 @@ class.update = function (self, dt)
     end
     
     self.handy.frame = 1
+end
+
+class.keypressed = function (self, key, scancode, isrepeat)
+    if key == 'z' and self.handy.detectingHole then
+        local hole = self.handy.detectingHole
+        self.handy.x = hole.x - 5
+        self.handy.y = hole.y - 5
+        return "reach"
+    end
 end
 
 return class

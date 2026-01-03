@@ -43,9 +43,12 @@ love.update = function (dt)
         hole:update(dt)
     end
     
+    handy.detectingHole = nil
+    
     for i, hole in ipairs(holes) do
         if rectOverlap(handy, hole) then
             hole.touching = true
+            handy.detectingHole = hole
         else
             hole.touching = false
         end
@@ -58,4 +61,8 @@ love.draw = function ()
     end
     
     handy:draw()
+end
+
+love.keypressed = function (key, scancode, isrepeat)
+    handy:keypressed(key, scancode, isrepeat)
 end

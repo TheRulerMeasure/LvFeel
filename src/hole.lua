@@ -11,6 +11,7 @@ local draw = function (self)
     
     self.sprite:drawCenter(self.frame, self.x + 16, self.y + 16)
     
+    --[[
     if self.touching then
         love.graphics.setColor(0, 1, 0, 1)
     else
@@ -18,6 +19,7 @@ local draw = function (self)
     end
     love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
     love.graphics.setColor(1, 1, 1 ,1)
+    ]]
 end
 
 return function (x, y) return {
