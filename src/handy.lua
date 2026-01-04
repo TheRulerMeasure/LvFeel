@@ -8,6 +8,7 @@ local states = {
     idle = require(pathToStates .. "idle"),
     move = require(pathToStates .. "move"),
     reach = require(pathToStates .. "reach"),
+    check = require(pathToStates .. "check")
 }
 
 local update = function (self, dt)
@@ -40,11 +41,23 @@ local draw = function (self)
                             self.x + self.spOffsetX,
                             self.y + self.spOffsetY)
     
+    if self.itemSprite then
+        love.graphics.setColor(self.itemSprite.color)
+        self.itemSprite.sprite:drawCenter(1,
+                                            self.x + self.spOffsetX,
+                                            self.y + self.spOffsetY - 20)
+        love.graphics.setColor(1, 1, 1, 1)
+    end
+    
     -- love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
 end
 
 local keypressed = function (self, key, scancode, isrepeat)
     self.sm:tick("keypressed", key, scancode, isrepeat)
+end
+
+local getItemFromHole = function (self)
+    return self.detectingHole:popItem()
 end
 
 return function (x, y)
@@ -54,6 +67,7 @@ return function (x, y)
     inst.update = update
     inst.draw = draw
     inst.keypressed = keypressed
+    inst.getItemFromHole = getItemFromHole
     
     inst.x = x or 0
     inst.y = y or 0
@@ -67,6 +81,8 @@ return function (x, y)
     inst.motionY = 0
     
     inst.sprite = Asm:get("hand_sheet")
+    
+    inst.itemSprite = nil
     
     inst.frame = 1
     

@@ -22,7 +22,15 @@ local draw = function (self)
     ]]
 end
 
-return function (x, y) return {
+local popItem = function (self)
+    local item = self.item
+    
+    self.item = nil
+    
+    return item
+end
+
+return function (x, y, itemName, itemColor) return {
     
     x = x or 0,
     y = y or 0,
@@ -32,6 +40,11 @@ return function (x, y) return {
     
     frame = 1,
     
+    item = {
+        name = itemName or "money",
+        color = itemColor or { 0.5, 1, 0.75, 1 },
+    },
+    
     animTime = love.math.random() * 10,
     
     sprite = Asm:get("hole_sheet"),
@@ -40,5 +53,6 @@ return function (x, y) return {
     
     update = update,
     draw = draw,
+    popItem = popItem,
 }
 end

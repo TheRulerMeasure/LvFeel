@@ -1,9 +1,6 @@
--- reach --
+-- check --
 
 local handyState = require "src.handy.handystate"
-
-local STEP_TIME1 = 0.5
-local STEP_TIME2 = 1
 
 local class = {}
 
@@ -26,29 +23,40 @@ class.arrive = function (self)
     
     self.handy.moveMode = 2
     
-    self.handy.frame = 5
-    self.handy.spOffsetY = 20
+    self.handy.frame = 3
 end
 
 class.update = function (self, dt)
-    
     if self.curStep == 1 then
         
-        if self.tt >= STEP_TIME1 then
+        if self.tt >= 0.5 then
             self.tt = 0
             
             self.curStep = 2
-            self.handy.frame = 6
-            self.handy.spOffsetY = -5
+            self.handy.frame = 4
+            
+            local item = self.handy:getItemFromHole()
+            
+            local itemSprite = {}
+            
+            if item then
+                itemSprite.sprite = Asm:get(item.name)
+                itemSprite.color = item.color
+            else
+                itemSprite.sprite = Asm:get("null")
+                itemSprite.color = { 1, 1, 1, 1 }
+            end
+            
+            self.handy.itemSprite = itemSprite
         end
         
     elseif self.curStep == 2 then
         
-        if self.tt >= STEP_TIME2 then
+        if self.tt >= 1 then
             self.tt = 0
             
             self.curStep = 3
-            return "check"
+            return "idle"
         end
         
     end
@@ -58,7 +66,7 @@ end
 
 class.leave = function (self)
     self.handy.moveMode = 1
-    self.handy.spOffsetY = 40
+    self.handy.itemSprite = nil
 end
 
 return class
