@@ -25,6 +25,10 @@ end
 local popItem = function (self)
     local item = self.item
     
+    if item then
+        HoleGame:foundItem()
+    end
+    
     self.item = nil
     
     return item

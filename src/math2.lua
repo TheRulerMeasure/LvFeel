@@ -8,7 +8,18 @@ local rectOverlap = function (r1, r2)
     return aabbOverlap(r1.x, r1.y, r1.width, r1.height, r2.x, r2.y, r2.width, r2.height)
 end
 
+local len2 = function (x, y)
+    return x * x + y * y
+end
+
+local dist2 = function (x1, y1, x2, y2)
+    return len2(x1 - x2, y1 - y2)
+end
+
 return {
     aabbOverlap = aabbOverlap,
     rectOverlap = rectOverlap,
+    
+    len2 = len2,
+    dist2 = dist2,
 }

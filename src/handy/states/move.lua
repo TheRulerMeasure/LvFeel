@@ -31,7 +31,7 @@ class.update = function (self, dt)
 end
 
 class.keypressed = function (self, key, scancode, isrepeat)
-    if key == 'z' and self.handy.detectingHole then
+    if (key == 'z' or key == "space" or key == "return") and self.handy.detectingHole then
         local hole = self.handy.detectingHole
         self.handy.x = hole.x - 5
         self.handy.y = hole.y - 5

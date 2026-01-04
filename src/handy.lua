@@ -12,17 +12,17 @@ local states = {
 }
 
 local update = function (self, dt)
-    if love.keyboard.isDown("right") then
+    if love.keyboard.isDown("right", 'd') then
         self.motionX = 1
-    elseif love.keyboard.isDown("left") then
+    elseif love.keyboard.isDown("left", 'a') then
         self.motionX = -1
     else
         self.motionX = 0
     end
     
-    if love.keyboard.isDown("down") then
+    if love.keyboard.isDown("down", 's') then
         self.motionY = 1
-    elseif love.keyboard.isDown("up") then
+    elseif love.keyboard.isDown("up", 'w') then
         self.motionY = -1
     else
         self.motionY = 0

@@ -38,25 +38,46 @@ function SceneManager.new(scenes)
     self.scenes = scenes
     self.curScene = nil
     
+    self.newScene = nil
+    
     return self
 end
 
 function SceneManager:update(dt)
-    self.curScene:update(dt)
+    if self.curScene then
+        self.curScene:update(dt)
+    end
+    
+    self:transitScene()
 end
 
 function SceneManager:draw()
-    self.curScene:draw()
+    if self.curScene then
+        self.curScene:draw()
+    end
 end
 
 function SceneManager:keypressed(key, scancode, isrepeat)
-    self.curScene:keypressed(key, scancode, isrepeat)
+    if self.curScene then
+        self.curScene:keypressed(key, scancode, isrepeat)
+    end
+end
+
+function SceneManager:transitScene()
+    if not self.newScene then
+        return
+    end
+    
+    if self.curScene then
+        self.curScene:leave()
+    end
+    self.curScene = self.scenes[self.newScene]
+    self.newScene = nil
+    self.curScene:arrive()
 end
 
 function SceneManager:changeScene(name)
-    if self.curScene then self.curScene:leave() end
-    self.curScene = self.scenes[name]
-    self.curScene:arrive()
+    self.newScene = name
 end
 
 return {

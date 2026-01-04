@@ -1,24 +1,23 @@
 -- main --
 
---[[
 local newAsm = require "src.assetmanager"
 
-local newHandy = require "src.handy"
-local newHole = require "src.hole"
+local SceneManager = require("src/scene").sceneManager
 
--- Asm
--- Handy
--- Holes
+local GameA = require "src.scenes.game-a"
+local GameAAfter = require "src.scenes.game-a-after"
+local GameB = require "src.scenes.game-b"
+local GameBAfter = require "src.scenes.game-b-after"
+local GameC = require "src.scenes.game-c"
+local GameCAfter = require "src.scenes.game-c-after"
+local GameEnd = require "src.scenes.game-end"
 
-local aabbOverlap = function (x1, y1, w1, h1, x2, y2, w2, h2)
-    return not (x1 > x2+w2 or x1+w1 < x2 or y1 > y2+h2 or y1+h1 < y2)
-end
-
-local rectOverlap = function (r1, r2)
-    return aabbOverlap(r1.x, r1.y, r1.width, r1.height, r2.x, r2.y, r2.width, r2.height)
-end
-
-love.load = function ()
+function love.load()
+    local font = love.graphics.newImageFont("assets/textures/fontrmsure_sheet.png",
+                                            " abcdefghijklmnopqrstuvwxyz" ..
+                                            "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ..
+                                            "0123456789`~!@#$%^&*()-_+={[}]|\\:;'\",<>./?")
+    love.graphics.setFont(font)
     
     Asm = newAsm()
     Asm:addSprite("hand_sheet", "assets/textures/hand_sheet2.png", {
@@ -37,55 +36,20 @@ love.load = function ()
     Asm:addSprite("spikeball", "assets/textures/spikeball.png")
     Asm:addSprite("worm", "assets/textures/worm.png")
     
-    love.graphics.setBackgroundColor(0.77, 0.72, 0.73, 1)
+    local bgm = love.audio.newSource("assets/music/whistlehole.wav", "stream")
+    bgm:setLooping(true)
+    bgm:play()
     
-    Handy = newHandy(100, 300)
+    love.graphics.setBackgroundColor(0.11, 0.1, 0.1, 1)
     
-    Holes = {}
-    
-    table.insert(Holes, newHole(200, 200))
-    table.insert(Holes, newHole(300, 250))
-end
-
-love.update = function (dt)
-    Handy:update(dt)
-    for i, hole in ipairs(Holes) do
-        hole:update(dt)
-    end
-    
-    Handy.detectingHole = nil
-    
-    for i, hole in ipairs(Holes) do
-        if rectOverlap(Handy, hole) then
-            hole.touching = true
-            Handy.detectingHole = hole
-        else
-            hole.touching = false
-        end
-    end
-end
-
-love.draw = function ()
-    for i, hole in ipairs(Holes) do
-        hole:draw()
-    end
-    
-    Handy:draw()
-end
-
-love.keypressed = function (key, scancode, isrepeat)
-    Handy:keypressed(key, scancode, isrepeat)
-end
-]]
-
-local GameA = require "src.scenes.game-a"
-local GameB = require "src.scenes.game-b"
-local SceneManager = require("src/scene").sceneManager
-
-function love.load()
     GScene = SceneManager.new({
         ["game_a"] = GameA.new(),
+        ["game_a_after"] = GameAAfter.new(),
         ["game_b"] = GameB.new(),
+        ["game_b_after"] = GameBAfter.new(),
+        ["game_c"] = GameC.new(),
+        ["game_c_after"] = GameCAfter.new(),
+        ["game_end"] = GameEnd.new(),
     })
     
     GScene:changeScene("game_a")

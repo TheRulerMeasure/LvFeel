@@ -1,4 +1,4 @@
--- game-b --
+-- game-c --
 
 local math2 = require "src.math2"
 
@@ -22,25 +22,26 @@ local function tooClose(x, y, positions)
     return false
 end
 
-local GameB = setmetatable({}, Scene)
-GameB.__index = GameB
+local GameC = setmetatable({}, Scene)
+GameC.__index = GameC
 
-function GameB.new()
-    local self = setmetatable(Scene.new(), GameB)
+function GameC.new()
+    local self = setmetatable(Scene.new(), GameC)
     
     return self
 end
 
-function GameB:arrive()
+function GameC:arrive()
     local items = {
         { name = "coffee", color = {0.88, 0.77, 0.22, 1} },
         { name = "spikeball", color = {1, 1, 1, 1} },
         { name = "bug", color = {0.75, 0.58, 0.89, 1} },
         { name = "money", color = {0.5, 0.7, 0.75, 1} },
         { name = "worm", color = {0.8, 0.5, 0.75, 1} },
+        { name = "frog", color = {0.8, 0.5, 0.75, 1} },
     }
     
-    HoleGame = newHoleGame(#items, "game_b_after")
+    HoleGame = newHoleGame(#items, "game_c_after")
     
     Handy = newHandy(400, 300)
     
@@ -60,7 +61,7 @@ function GameB:arrive()
     end
 end
 
-function GameB:update(dt)
+function GameC:update(dt)
     
     HoleGame:update(dt)
     
@@ -81,7 +82,7 @@ function GameB:update(dt)
     end
 end
 
-function GameB:draw()
+function GameC:draw()
     for i, hole in ipairs(Holes) do
         hole:draw()
     end
@@ -89,14 +90,14 @@ function GameB:draw()
     Handy:draw()
 end
 
-function GameB:leave()
+function GameC:leave()
     Handy = nil
     Holes = nil
     HoleGame = nil
 end
 
-function GameB:keypressed(key, scancode, isrepeat)
+function GameC:keypressed(key, scancode, isrepeat)
     Handy:keypressed(key, scancode, isrepeat)
 end
 
-return GameB
+return GameC
